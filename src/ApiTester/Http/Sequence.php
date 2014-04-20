@@ -4,12 +4,11 @@ namespace ApiTester\Http;
 
 use ApiTester\Config\Config;
 use ApiTester\Assertion\Exception as AssertionException;
+use ApiTester\Assertion\Validator;
 
 class Sequence
 {
     protected $name;
-
-    protected $requests = array();
 
     protected $variables;
 
@@ -19,10 +18,10 @@ class Sequence
 
     protected $assertions;
 
-    public function __construct(Config $spec, Config $globals, array $assertions)
+    public function __construct(Config $spec, Config $globals,  Validator $validator)
     {
         $this->spec = $spec;
-        $this->assertions = $assertions;
+        $this->validator = $validator;
         $this->name = $spec->get('name');
         $this->variables = new Config($spec->get('variables'));
 
@@ -67,21 +66,6 @@ class Sequence
         if(!$expects = $details->get('expects_response')) {
             return;
         }
-
-        $errors = [];
-
-        foreach($expects as $assertionName => $value) {
-
-            if(isset($this->assertions[$assertionName])) {
-                $assertionErrors = $this->assertions[$assertionName]->validate($response, $value);
-
-                if($assertionErrors) {
-                    $errors[$assertionName] = $assertionErrors;
-                }
-            } else {
-                throw new \Exception('Invalid assertion : ' . $assertionName);
-            }
-        }
-        return $errors;
+        return $this->validator->validateAll($expects, $response);
     }
 }

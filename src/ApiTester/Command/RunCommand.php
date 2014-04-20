@@ -12,6 +12,16 @@ use ApiTester\TestEnvironment;
 
 class RunCommand extends Command
 {
+    protected $variableClasses = array(
+        'random_string' => '\\ApiTester\\Variable\\RandomString',
+    );
+
+    protected $assertionClasses = array(
+        'status_code' => '\\ApiTester\\Assertion\\StatusCode',
+        'format' => '\\ApiTester\\Assertion\\Format',
+        'json_values' => '\\ApiTester\\Assertion\\JsonValues',
+    );
+
     protected function configure()
     {
         $this
@@ -29,7 +39,10 @@ class RunCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // setup application
-        $env = new TestEnvironment;
+        $env = new TestEnvironment(
+            new \ApiTester\Variable\Replacer($this->variableClasses),
+            new \ApiTester\Assertion\Validator($this->assertionClasses)
+        );
 
         $env->registerConfigFileLoader(new \ApiTester\Config\YamlFileLoader);
         $env->loadConfigFile($input->getArgument('config-file'));

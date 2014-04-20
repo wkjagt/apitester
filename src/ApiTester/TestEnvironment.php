@@ -6,6 +6,8 @@ use ApiTester\Config\FileLoaderInterface;
 use ApiTester\Config\Config;
 use ApiTester\Http\Sequence;
 use ApiTester\Http\Client;
+use ApiTester\Variable\Replacer;
+use ApiTester\Assertion\Validator;
 
 class TestEnvironment
 {
@@ -13,19 +15,14 @@ class TestEnvironment
 
     protected $globalConfig = null;
 
-    protected $assertions = [];
+    protected $replacer;
 
-    protected $assertionClasses = array(
-        'status_code' => '\\ApiTester\\Assertion\\StatusCode',
-        'format' => '\\ApiTester\\Assertion\\Format',
-        'json_values' => '\\ApiTester\\Assertion\\JsonValues',
-    );
+    protected $validator;
 
-    public function __construct()
+    public function __construct(Replacer $replacer, Validator $validator)
     {
-        foreach($this->assertionClasses as $name => $class) {
-            $this->assertions[$name] = new $class;
-        }
+        $this->replacer = $replacer;
+        $this->validator = $validator;
     }
 
     public function registerConfigFileLoader(FileLoaderInterface $configFileLoader)
@@ -43,7 +40,6 @@ class TestEnvironment
     {
         foreach($this->getSequences() as $sequence) {
             $errors = $sequence->run();
-            echo '<pre>file: '.__FILE__."\nline: ".__LINE__."\n".print_r($errors, true).'</pre>';die;
         }
     }
 
@@ -52,30 +48,13 @@ class TestEnvironment
         $specs = $this->globalConfig->get('sequences');
         foreach($specs as &$spec) {
 
-            $spec['variables'] = $this->replaceVariables($spec['variables']);
+            $spec['variables'] = $this->replacer->replaceAll($spec['variables']);
             $spec['requests'] = $this->setVariables($spec['requests'], $spec['variables']);
 
             $globals = new Config($this->globalConfig->get('globals'));
-            $sequences[] = new Sequence(new Config($spec), $globals, $this->assertions);
+            $sequences[] = new Sequence(new Config($spec), $globals, $this->validator);
         }
         return $sequences;
-    }
-
-    // todo: make this a plugin system
-    public function replaceVariables($variables)
-    {
-        foreach($variables as $key => &$value) {
-            if(preg_match('/\%(\w+)\%/', $value, $matches)) {
-                switch($matches[1]) {
-                    case 'random_string':
-                        $value = bin2hex(openssl_random_pseudo_bytes(40));
-                        break;
-                    default:
-                        throw new \Exception('Invalid function : '. $matches[1]);
-                }
-            }
-        }
-        return $variables;
     }
 
     public function setVariables(array $requests, array $variables)
