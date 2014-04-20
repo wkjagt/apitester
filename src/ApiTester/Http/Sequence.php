@@ -18,7 +18,7 @@ class Sequence
 
     protected $assertions;
 
-    public function __construct(Config $spec, Config $globals,  Validator $validator)
+    public function __construct(Config $spec, Config $globals, Validator $validator)
     {
         $this->spec = $spec;
         $this->validator = $validator;
@@ -52,20 +52,10 @@ class Sequence
             $request = new Request($this->client, $details, $this->variables);
 
             $response = $request->run();
-
-            if($requestErrors = $this->validateResponse($details, $response)) {
-                $errors[$details->get('name')] = $requestErrors;
+            if($expects = $details->get('expects_response')) {
+                $this->validator->validateAll($expects, $response, $this->name, $requestDetails['name']);                
             }
         }
         return $errors;
-    }
-
-
-    public function validateResponse($details, $response)
-    {
-        if(!$expects = $details->get('expects_response')) {
-            return;
-        }
-        return $this->validator->validateAll($expects, $response);
     }
 }

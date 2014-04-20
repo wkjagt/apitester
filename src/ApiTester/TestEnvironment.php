@@ -38,13 +38,6 @@ class TestEnvironment
 
     public function runall()
     {
-        foreach($this->getSequences() as $sequence) {
-            $errors = $sequence->run();
-        }
-    }
-
-    public function getSequences()
-    {
         $specs = $this->globalConfig->get('sequences');
         foreach($specs as &$spec) {
 
@@ -52,9 +45,9 @@ class TestEnvironment
             $spec['requests'] = $this->setVariables($spec['requests'], $spec['variables']);
 
             $globals = new Config($this->globalConfig->get('globals'));
-            $sequences[] = new Sequence(new Config($spec), $globals, $this->validator);
+            $sequence = new Sequence(new Config($spec), $globals, $this->validator);
+            $errors = $sequence->run();
         }
-        return $sequences;
     }
 
     public function setVariables(array $requests, array $variables)

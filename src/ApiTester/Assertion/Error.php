@@ -17,4 +17,14 @@ class Error
         $this->additional = $additional;
     }
 
+    public function getActual()
+    {
+        return $this->actual;
+    }
+
+    public function getExpected()
+    {
+        return $this->expected;
+    }
+
 }
