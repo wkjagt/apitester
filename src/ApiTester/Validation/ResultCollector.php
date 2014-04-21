@@ -2,7 +2,7 @@
 
 namespace ApiTester\Validation;
 
-class ErrorCollector
+class ResultCollector
 {
     protected $output;
 

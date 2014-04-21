@@ -2,18 +2,18 @@
 
 namespace ApiTester\Validation;
 
-use ApiTester\Validation\ErrorCollector;
+use ApiTester\Validation\ResultCollector;
 
 class Validator
 {
     protected $assertions = array();
 
-    public function __construct(array $assertionClasses = array(), ErrorCollector $errorCollector)
+    public function __construct(array $assertionClasses = array(), ResultCollector $resultCollector)
     {
         foreach($assertionClasses as $name => $class) {
             $this->assertions[$name] = new $class;
         }
-        $this->errorCollector = $errorCollector;
+        $this->resultCollector = $resultCollector;
     }
 
     public function validateAll($expects, $response, $sequenceName, $requestName)
@@ -25,7 +25,7 @@ class Validator
 
                 if($assertionErrors) {
                     foreach($assertionErrors as $error) {
-                        $this->errorCollector->add($error, $sequenceName, $requestName);
+                        $this->resultCollector->add($error, $sequenceName, $requestName);
                     }
                 }
             } else {

@@ -38,12 +38,12 @@ class RunCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $errorCollector = new \ApiTester\Validation\ErrorCollector($output);
+        $resultCollector = new \ApiTester\Validation\ResultCollector($output);
 
         // setup application
         $env = new TestEnvironment(
             new \ApiTester\Variable\Replacer($this->variableClasses),
-            new \ApiTester\Validation\Validator($this->assertionClasses, $errorCollector)
+            new \ApiTester\Validation\Validator($this->assertionClasses, $resultCollector)
         );
 
         $env->registerConfigFileLoader(new \ApiTester\Config\YamlFileLoader);
