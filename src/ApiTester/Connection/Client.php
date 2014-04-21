@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiTester\Http;
+namespace ApiTester\Connection;
 
 use GuzzleHttp\Client as GuzzleHttpClient;
 

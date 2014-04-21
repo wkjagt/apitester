@@ -4,8 +4,8 @@ namespace ApiTester;
 
 use ApiTester\Config\FileLoaderInterface;
 use ApiTester\Config\Config;
-use ApiTester\Http\Sequence;
-use ApiTester\Http\Client;
+use ApiTester\Connection\Sequence;
+use ApiTester\Connection\Client;
 use ApiTester\Variable\Replacer;
 use ApiTester\Validation\Validator;
 
