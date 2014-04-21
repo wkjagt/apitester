@@ -14,12 +14,11 @@ class JsonValues implements AssertionInterface
 
         $errors = [];
 
-        foreach($values as $value) {
-            $actual = $bodyValues->get($value['key']);
-            $expected = $value['value'];
+        foreach($values as $key => $expected) {
+            $actual = $bodyValues->get($key);
 
             if($actual != $expected) {
-                $errors[] = new Error($expected, $actual, ['key' => $value['key']]);
+                $errors[] = new Error($expected, $actual, ['key' => $key]);
             }
         }
         return $errors;
