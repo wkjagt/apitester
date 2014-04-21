@@ -2,7 +2,7 @@
 
 namespace ApiTester\Validation;
 
-class Error extends Result
+class Error
 {
     protected $actual;
 

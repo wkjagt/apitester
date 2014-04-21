@@ -12,15 +12,15 @@ use ApiTester\TestEnvironment;
 
 class RunCommand extends Command
 {
-    protected $variableClasses = array(
+    protected $variableClasses = [
         'random_string' => '\\ApiTester\\Variable\\RandomString',
-    );
+    ];
 
-    protected $assertionClasses = array(
+    protected $assertionClasses = [
         'status_code' => '\\ApiTester\\Validation\\Assertion\\StatusCode',
         'format' => '\\ApiTester\\Validation\\Assertion\\Format',
         'json_values' => '\\ApiTester\\Validation\\Assertion\\JsonValues',
-    );
+    ];
 
     protected function configure()
     {

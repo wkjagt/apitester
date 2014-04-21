@@ -8,7 +8,7 @@ class Replacer
 
     protected $variableReplacers = [];
 
-    public function __construct(array $variableClasses = array())
+    public function __construct(array $variableClasses = [])
     {
         foreach($variableClasses as $varName => $class) {
             $this->variableReplacers[$varName] = new $class;

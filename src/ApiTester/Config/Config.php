@@ -6,7 +6,7 @@ use Seagull;
 
 class Config
 {
-    protected $config = array();
+    protected $config = [];
 
     public function __construct(array $raw)
     {

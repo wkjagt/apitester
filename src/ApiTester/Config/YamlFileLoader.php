@@ -6,9 +6,9 @@ use Symfony\Component\Yaml\Parser;
 
 class YamlFileLoader extends Parser implements FileLoaderInterface
 {
-    protected $configs= array();
+    protected $configs= [];
 
-    protected $parsed = array();
+    protected $parsed = [];
 
     public function load($filePath)
     {

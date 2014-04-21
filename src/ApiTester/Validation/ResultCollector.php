@@ -13,17 +13,36 @@ class ResultCollector
         $this->output = $output;
     }
 
-    public function add(Error $error, $sequenceName, $requestName)
+    public function addError(Error $error, $assertionName, $sequenceName, $requestName)
     {
         $this->errors[] = $error;
 
-        $msg = 'Error for request "%s" in sequence "%s". Got "%s" instead of "%s"';
+        $msg = 'Error for %s/%s/%s. Got "%s" instead of "%s"';
         $msg = sprintf($msg,
-            $requestName,
             $sequenceName,
+            $requestName,
+            $assertionName,
             $error->getActual(),
             $error->getExpected()
         );
-        $this->output->writeln($msg);
+        $this->output->writeln("<error>$msg</error>");
+    }
+
+    public function addErrors(array $results, $assertionName, $sequenceName, $requestName)
+    {
+        foreach($results as $result) {
+            $this->addError($result, $assertionName, $sequenceName, $requestName);
+        }
+    }
+
+    public function addSuccess($assertionName, $sequenceName, $requestName)
+    {
+        $msg = 'Success for %s/%s/%s';
+        $msg = sprintf($msg,
+            $sequenceName,
+            $requestName,
+            $assertionName
+        );
+        $this->output->writeln("<info>$msg</info>");
     }
 }
