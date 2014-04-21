@@ -3,7 +3,7 @@
 namespace ApiTester;
 
 use ApiTester\Config\FileLoaderInterface;
-use ApiTester\Config\Config;
+use ApiTester\ArrayAccess;
 use ApiTester\Connection\Sequence;
 use ApiTester\Connection\Client;
 use ApiTester\Variable\Replacer;
@@ -44,8 +44,8 @@ class TestEnvironment
             $spec['variables'] = $this->replacer->replaceAll($spec['variables']);
             $spec['requests'] = $this->setVariables($spec['requests'], $spec['variables']);
 
-            $globals = new Config($this->globalConfig->get('globals'));
-            $sequence = new Sequence(new Config($spec), $globals, $this->validator);
+            $globals = new ArrayAccess($this->globalConfig->get('globals'));
+            $sequence = new Sequence(new ArrayAccess($spec), $globals, $this->validator);
             $errors = $sequence->run();
         }
     }

@@ -2,7 +2,7 @@
 
 namespace ApiTester\Connection;
 
-use ApiTester\Config\Config;
+use ApiTester\ArrayAccess;
 use ApiTester\Validation\Exception as AssertionException;
 use ApiTester\Validation\Validator;
 
@@ -18,12 +18,12 @@ class Sequence
 
     protected $assertions;
 
-    public function __construct(Config $spec, Config $globals, Validator $validator)
+    public function __construct(ArrayAccess $spec, ArrayAccess $globals, Validator $validator)
     {
         $this->spec = $spec;
         $this->validator = $validator;
         $this->name = $spec->get('name');
-        $this->variables = new Config($spec->get('variables'));
+        $this->variables = new ArrayAccess($spec->get('variables'));
 
         $this->setClient($globals);
     }
@@ -48,7 +48,7 @@ class Sequence
 
         foreach($this->spec->get('requests') as $requestDetails) {
 
-            $details = new Config($requestDetails);
+            $details = new ArrayAccess($requestDetails);
             $request = new Request($this->client, $details, $this->variables);
 
             $response = $request->run();

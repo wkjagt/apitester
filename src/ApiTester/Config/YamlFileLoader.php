@@ -3,6 +3,7 @@
 namespace ApiTester\Config;
 
 use Symfony\Component\Yaml\Parser;
+use ApiTester\ArrayAccess;
 
 class YamlFileLoader extends Parser implements FileLoaderInterface
 {
@@ -23,7 +24,7 @@ class YamlFileLoader extends Parser implements FileLoaderInterface
 
     public function getConfig()
     {
-        return new Config($this->getRawConfig());
+        return new ArrayAccess($this->getRawConfig());
     }
 
 }

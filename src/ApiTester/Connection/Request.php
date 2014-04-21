@@ -2,7 +2,7 @@
 
 namespace ApiTester\Connection;
 
-use ApiTester\Config\Config;
+use ApiTester\ArrayAccess;
 
 class Request
 {
@@ -12,7 +12,7 @@ class Request
 
     protected $client;
 
-    public function __construct(Client $client, Config $requestDetails, Config $variables)
+    public function __construct(Client $client, ArrayAccess $requestDetails, ArrayAccess $variables)
     {
         $this->client = $client;
         $this->requestDetails = $requestDetails;
