@@ -1,8 +1,8 @@
 <?php
 
-namespace ApiTester\Assertion;
+namespace ApiTester\Validation;
 
-use ApiTester\Assertion\ErrorCollector;
+use ApiTester\Validation\ErrorCollector;
 
 class Validator
 {

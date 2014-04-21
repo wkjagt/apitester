@@ -7,7 +7,7 @@ use ApiTester\Config\Config;
 use ApiTester\Http\Sequence;
 use ApiTester\Http\Client;
 use ApiTester\Variable\Replacer;
-use ApiTester\Assertion\Validator;
+use ApiTester\Validation\Validator;
 
 class TestEnvironment
 {

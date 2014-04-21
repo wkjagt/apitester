@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiTester\Assertion;
+namespace ApiTester\Validation;
 
 use ApiTester\Config\Config;
 

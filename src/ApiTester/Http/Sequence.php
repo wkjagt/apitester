@@ -3,8 +3,8 @@
 namespace ApiTester\Http;
 
 use ApiTester\Config\Config;
-use ApiTester\Assertion\Exception as AssertionException;
-use ApiTester\Assertion\Validator;
+use ApiTester\Validation\Exception as AssertionException;
+use ApiTester\Validation\Validator;
 
 class Sequence
 {
