@@ -17,9 +17,9 @@ class RunCommand extends Command
     );
 
     protected $assertionClasses = array(
-        'status_code' => '\\ApiTester\\Validation\\StatusCode',
-        'format' => '\\ApiTester\\Validation\\Format',
-        'json_values' => '\\ApiTester\\Validation\\JsonValues',
+        'status_code' => '\\ApiTester\\Validation\\Assertion\\StatusCode',
+        'format' => '\\ApiTester\\Validation\\Assertion\\Format',
+        'json_values' => '\\ApiTester\\Validation\\Assertion\\JsonValues',
     );
 
     protected function configure()
