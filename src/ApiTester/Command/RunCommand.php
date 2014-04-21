@@ -16,12 +16,6 @@ class RunCommand extends Command
         'random_string' => '\\ApiTester\\Variable\\RandomString',
     ];
 
-    protected $assertionClasses = [
-        'status_code' => '\\ApiTester\\Validation\\Assertion\\StatusCode',
-        'format' => '\\ApiTester\\Validation\\Assertion\\Format',
-        'json_values' => '\\ApiTester\\Validation\\Assertion\\JsonValues',
-    ];
-
     protected function configure()
     {
         $this
@@ -38,12 +32,24 @@ class RunCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $valueFunctions = [
+            'equals' => new \ApiTester\Validation\Assertion\ValueValidationFunction\Equals
+        ];
+        
+        $valueValidator = new \ApiTester\Validation\Assertion\ValueValidator($valueFunctions);
+
+        $assertions = [
+            'status_code' => new \ApiTester\Validation\Assertion\StatusCode,
+            'format' => new \ApiTester\Validation\Assertion\Format,
+            'json_values' => new \ApiTester\Validation\Assertion\JsonValues($valueValidator),
+        ];        
+
         $resultCollector = new \ApiTester\Validation\ResultCollector($output);
 
         // setup application
         $env = new TestEnvironment(
             new \ApiTester\Variable\Replacer($this->variableClasses),
-            new \ApiTester\Validation\Validator($this->assertionClasses, $resultCollector)
+            new \ApiTester\Validation\Validator($assertions, $resultCollector)
         );
 
         $env->registerConfigFileLoader(new \ApiTester\Config\YamlFileLoader);

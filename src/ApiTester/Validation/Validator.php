@@ -8,11 +8,9 @@ class Validator
 {
     protected $assertions = [];
 
-    public function __construct(array $assertionClasses = [], ResultCollector $resultCollector)
+    public function __construct(array $assetions, ResultCollector $resultCollector)
     {
-        foreach($assertionClasses as $name => $class) {
-            $this->assertions[$name] = new $class;
-        }
+        $this->assertions = $assetions;
         $this->resultCollector = $resultCollector;
     }
 
