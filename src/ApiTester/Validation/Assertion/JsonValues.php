@@ -3,6 +3,7 @@
 namespace ApiTester\Validation\Assertion;
 
 use ApiTester\Config\Config;
+use ApiTester\Validation\Error;
 
 class JsonValues implements AssertionInterface
 {

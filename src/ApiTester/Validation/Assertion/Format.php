@@ -2,6 +2,8 @@
 
 namespace ApiTester\Validation\Assertion;
 
+use ApiTester\Validation\Error;
+
 class Format implements AssertionInterface
 {
     public function validate($response, $value)
