@@ -5,7 +5,7 @@ namespace ApiTester\Validation\Assertion;
 use ApiTester\ArrayAccess;
 use ApiTester\Validation\Error;
 
-class ValueValidator
+abstract class ValueAssertion implements AssertionInterface
 {
     const PATTERN = '/\((?P<function>\w+)\:(?P<value>\w+)\)/';
 
@@ -16,7 +16,9 @@ class ValueValidator
         $this->functions = $functions;
     }
 
-    public function validate($bodyValues, $values)
+    abstract public function validate($response, $values);
+
+    protected function runFunctions($bodyValues, $values)
     {
         $errors = [];
 
@@ -38,6 +40,7 @@ class ValueValidator
             }
         }
         return $errors;
+
     }
 
 }

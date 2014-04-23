@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiTester\Variable;
+namespace ApiTester\Variable\Callback;
 
 class RandomString
 {

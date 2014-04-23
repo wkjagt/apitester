@@ -10,10 +10,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use ApiTester\TestEnvironment;
 
+use ApiTester\Validation\Assertion\StatusCodeAssertion;
+use ApiTester\Validation\Assertion\ResponseFormatAssertion;
+use ApiTester\Validation\Assertion\JsonValueAssertion;
+
+
 class RunCommand extends Command
 {
     protected $variableClasses = [
-        'random_string' => '\\ApiTester\\Variable\\RandomString',
+        'random_string' => '\\ApiTester\\Variable\\Callback\\RandomString',
     ];
 
     protected function configure()
@@ -36,12 +41,10 @@ class RunCommand extends Command
             'equals' => new \ApiTester\Validation\Assertion\ValueValidationFunction\Equals
         ];
         
-        $valueValidator = new \ApiTester\Validation\Assertion\ValueValidator($valueFunctions);
-
         $assertions = [
-            'status_code' => new \ApiTester\Validation\Assertion\StatusCode,
-            'format' => new \ApiTester\Validation\Assertion\Format,
-            'json_values' => new \ApiTester\Validation\Assertion\JsonValues($valueValidator),
+            'status_code' => new StatusCodeAssertion,
+            'format' => new ResponseFormatAssertion,
+            'json_values' => new JsonValueAssertion($valueFunctions),
         ];        
 
         $resultCollector = new \ApiTester\Validation\ResultCollector($output);
