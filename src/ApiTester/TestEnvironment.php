@@ -41,7 +41,10 @@ class TestEnvironment
         $specs = $this->globalConfig->get('sequences');
         foreach($specs as &$spec) {
 
-            $spec['variables'] = $this->replacer->replaceAll($spec['variables']);
+            $spec['variables'] = isset($spec['variables'])
+                ? $this->replacer->replaceAll($spec['variables'])
+                : array();
+
             $spec['requests'] = $this->setVariables($spec['requests'], $spec['variables']);
 
             $globals = new ArrayAccess($this->globalConfig->get('globals'));
