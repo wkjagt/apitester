@@ -6,7 +6,8 @@
         "seagull/seagull" : "dev-master",
         "guzzlehttp/guzzle": "4.*",
 
-        "php" : ">=5.4.0"
+        "php" : ">=5.4.0",
+        "ext-curl" : "*"
     },
     "require-dev" : {
         "phpunit/phpunit": "4.0.14"
