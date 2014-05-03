@@ -7,7 +7,7 @@ use ApiTester\Validation\Error;
 
 abstract class ValueAssertion implements AssertionInterface
 {
-    const PATTERN = '/\((?P<function>\w+)\:(?P<value>\w+)\)/';
+    const PATTERN = '/^\((?P<function>\w+)\:(?P<value>.+)\)$/';
 
     protected $functions = [];
 

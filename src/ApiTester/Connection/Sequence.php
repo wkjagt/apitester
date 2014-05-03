@@ -41,7 +41,7 @@ class Sequence
             $request = new Request($this->client, $details, $this->variables);
 
             $response = $request->run();
-            // echo $response->getBody();die;
+            // echo $response->getBody();
             if($expects = $details->get('expects_response')) {
                 $this->validator->validateAll($expects, $response, $this->name, $requestDetails['name']);                
             }
