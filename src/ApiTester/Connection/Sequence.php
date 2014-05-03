@@ -24,22 +24,7 @@ class Sequence
         $this->validator = $validator;
         $this->name = $spec->get('name');
         $this->variables = new ArrayAccess($spec->get('variables'));
-
-        $this->setClient($globals);
-    }
-
-
-    /**
-     * Setup a http client using the globals
-     */
-    public function setClient($globals)
-    {        
-        $options = ['base_url' => $globals->get('request.base_url')];
-
-        if($defaults = $globals->get('request.defaults')) {
-            $options['defaults'] = $defaults;
-        }
-        $this->client = new Client($options);
+        $this->client = new Client($globals->get('request') ?: array());
     }
 
     public function run()
@@ -56,6 +41,7 @@ class Sequence
             $request = new Request($this->client, $details, $this->variables);
 
             $response = $request->run();
+            // echo $response->getBody();die;
             if($expects = $details->get('expects_response')) {
                 $this->validator->validateAll($expects, $response, $this->name, $requestDetails['name']);                
             }

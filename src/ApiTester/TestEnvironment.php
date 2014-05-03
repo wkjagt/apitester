@@ -39,13 +39,16 @@ class TestEnvironment
     public function runall()
     {
         $specs = $this->globalConfig->get('sequences');
+        $globalVars = $this->globalConfig->get('globals.variables') ?: [];
+
         foreach($specs as &$spec) {
 
             $spec['variables'] = isset($spec['variables'])
                 ? $this->replacer->replaceAll($spec['variables'])
                 : array();
 
-            $spec['requests'] = $this->setVariables($spec['requests'], $spec['variables']);
+            $variables = array_merge($globalVars, $spec['variables']);
+            $spec['requests'] = $this->setVariables($spec['requests'], $variables);
 
             $globals = new ArrayAccess($this->globalConfig->get('globals'));
             $sequence = new Sequence(new ArrayAccess($spec), $globals, $this->validator);

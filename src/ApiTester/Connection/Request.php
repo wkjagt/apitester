@@ -26,8 +26,11 @@ class Request
 
         $url = $details->get('url');
         $method = $details->get('method');
+        $options = $details->get('options');
 
-        $options = ['exceptions' => false];
+        // don't throw exceptions because we'll have tests that test for
+        // error responses
+        $options['exceptions'] = false;
 
         if(in_array($method, ['POST', 'PUT']) && $data = $details->get('data')) {
             switch($details->get('data.format')) {
