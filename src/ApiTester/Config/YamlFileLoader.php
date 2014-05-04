@@ -22,6 +22,9 @@ class YamlFileLoader extends Parser implements FileLoaderInterface
 
     protected function parseFileByPath($filePath)
     {
+        if(!is_readable($filePath)) {
+            throw new FileLoaderException(sprintf("Can't open file %s", $filePath));
+        }
         $contents = file_get_contents($filePath);
         return $this->parse($contents);
     }
