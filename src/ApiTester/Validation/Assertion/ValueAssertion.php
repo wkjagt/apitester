@@ -7,7 +7,7 @@ use ApiTester\Validation\Error;
 
 abstract class ValueAssertion implements AssertionInterface
 {
-    const PATTERN = '/^\((?P<function>\w+)\:(?P<value>.+)\)$/';
+    // const PATTERN = '/^\((?P<function>\w+)\:(?P<value>.+)\)$/';
 
     protected $functions = [];
 
@@ -22,21 +22,18 @@ abstract class ValueAssertion implements AssertionInterface
     {
         $errors = [];
 
-        foreach($values as $key => $expected) {
+        foreach($values as $key => $rule) { 
+            $function = isset($rule['function']) ? $rule['function'] : 'equals';
+            $expected = $rule['value'];
 
-            if(preg_match(self::PATTERN, $expected, $matches)) {
-                $function = $matches['function'];
-                $expected = $matches['value'];
-
-                if (isset($this->functions[$function])) {
-                    $actual = $bodyValues->get($key);
-                    if(!$this->functions[$function]->validate($actual, $expected)) {
-                        $errors[] = new Error($expected, $actual, ['key' => $key]);
-                    }
-
-                } else {
-                    throw new \Exception('Function not found: ' . $function);
+            if (isset($this->functions[$function])) {
+                $actual = $bodyValues->get($key);
+                if(!$this->functions[$function]->validate($actual, $expected)) {
+                    $errors[] = new Error($expected, $actual, ['key' => $key]);
                 }
+
+            } else {
+                throw new \Exception('Function not found: ' . $function);
             }
         }
         return $errors;
