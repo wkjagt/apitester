@@ -1,0 +1,82 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Complete Test Specification",
+    "type": "object",
+    "required" : ["globals", "sequences"],
+    "properties" : {
+        "globals" : {
+            "title" : "Global variables and options",
+            "type": "object",
+            "required" : ["request"],
+            "properties" : {
+                "variables" : {
+                    "type" : "object"
+                },
+                "request" : {
+                    "type" : "object",
+                    "title" : "Global request configuration",
+                    "required" : ["base_url"],
+                    "properties" : {
+                        "base_url" : {
+                            "title" : "The base url for all request",
+                            "type" : "string",
+                            "format": "uri"
+                        }
+                    }
+                }
+            }
+        },
+        "sequences" : {
+            "title" : "A list of sequences to run",
+            "type" : "array",
+            "minItems": 1,
+            "items" : {
+                "type" : "object",
+                "title" : "A sequence of requests",
+                "required" : ["name", "requests"],
+                "properties" : {
+                    "name": {
+                        "title" : "The name of the sequence",
+                        "type" : "string"
+                    },
+                    "variables" : {
+                        "title" : "A hash of variables to use in the requests",
+                        "type" : "object"
+                    },
+                    "requests" : {
+                        "title" : "A series of requests to perform for this sequence",
+                        "type" : "array",
+                        "minItems": 1,
+                        "items" : {
+                            "type" : "object",
+                            "title" : "An object describing one request",
+                            "required" : ["name", "url", "method"],
+                            "properties" : {
+                                "name" : {
+                                    "title" : "The name of the request",
+                                    "type" : "string"
+                                },
+                                "url" : {
+                                    "title" : "The url to call for this request",
+                                    "type" : "string"
+                                },
+                                "method" : {
+                                    "enum": [ "GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD" ]
+                                },
+                                "expects_response" : {
+                                    "title" : "The response that is expected to consider this test succesfull",
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status_code" : { "type" : "integer" },
+                                        "format" : { "enum" : ["json"] },
+                                        "json_values" : { "type" : "object" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -3,10 +3,11 @@
 namespace ApiTester;
 
 use Seagull;
+use JsonSerializable;
 
-class ArrayAccess
+class ArrayAccess implements JsonSerializable
 {
-    protected $array = [];
+    protected $array;
 
     public function __construct(array $raw)
     {
@@ -26,5 +27,10 @@ class ArrayAccess
     public function set($key, $value)
     {
         $this->array->set($key, $value);
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->array->get();
     }
 }

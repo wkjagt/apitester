@@ -5,6 +5,7 @@
         "symfony/yaml": "v2.4.3",
         "seagull/seagull" : "dev-master",
         "guzzlehttp/guzzle": "4.*",
+        "justinrainbow/json-schema": "1.3.6",
 
         "php" : ">=5.4.0",
         "ext-curl" : "*"
