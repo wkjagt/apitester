@@ -11,6 +11,13 @@ class YamlFileLoader extends Parser implements FileLoaderInterface
 
     protected $parsed = [];
 
+    protected $validator;
+
+    public function __construct(ValidatorInterface $validator)
+    {
+        $this->validator = $validator;
+    }
+
     public function load($filePath)
     {
         $fullPath = realpath($filePath);
@@ -18,6 +25,8 @@ class YamlFileLoader extends Parser implements FileLoaderInterface
 
         $this->parsed = $this->parseFileByPath($fullPath);
         $this->doIncludes($this->parsed);
+
+        $this->validator->validate($this->parsed);
     }
 
     protected function parseFileByPath($filePath)

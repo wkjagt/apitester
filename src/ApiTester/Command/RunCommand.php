@@ -55,7 +55,9 @@ class RunCommand extends Command
             new \ApiTester\Validation\Validator($assertions, $resultCollector)
         );
 
-        $env->registerConfigFileLoader(new \ApiTester\Config\YamlFileLoader);
+        $configValidator = new \ApiTester\Config\Validator(__DIR__.'/../../../schema.json', $output);
+
+        $env->registerConfigFileLoader(new \ApiTester\Config\YamlFileLoader($configValidator));
         $env->loadConfigFile($input->getArgument('config-file'));
 
         $env->runAll();

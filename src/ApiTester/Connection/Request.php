@@ -39,6 +39,8 @@ class Request
                     break;
             }
         }
+
+        // die;
         $request = $this->client->createRequest($method, $url, $options);
         return $this->client->send($request);
     }
