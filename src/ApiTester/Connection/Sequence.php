@@ -64,7 +64,6 @@ class Sequence
 
                 if($index < 0) {
                     // counting from the back
-                    $responses = array_reverse($responses);
                     $index += count($responses);
                 }
 
@@ -72,7 +71,7 @@ class Sequence
                     throw new \Exception(
                         sprintf('Out of range response index used in variable "%s".', $matches[0]));
                 }
-                $body = (string) end($responses)->getBody();
+                $body = (string) $responses[$index]->getBody();
 
                 // todo make this more flexible
                 switch($matches['format']) {
