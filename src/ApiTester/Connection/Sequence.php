@@ -55,12 +55,20 @@ class Sequence
     {
         array_walk_recursive($requestDetails, function(&$item, $key, $responses)
         {
-            $pattern = '/%responses\.(?P<index>\d+)\.(?P<format>\w+)_data\.(?P<key>[a-zA-Z0-9-_\.]+)%/';
+            $pattern = '/%responses\.(?P<index>-?\d+)\.(?P<format>\w+)_values\.(?P<key>[a-zA-Z0-9-_\.]+)%/';
 
             // $pattern = '/%previous_request\.(?P<format>\w+)_data\.(?P<key>[a-zA-Z0-9-_\.]+)%/';
             $item = preg_replace_callback($pattern, function($matches) use ($responses)
             {
-                if(!isset($responses[$matches['index']])) {
+                $index = $matches['index'];
+
+                if($index < 0) {
+                    // counting from the back
+                    $responses = array_reverse($responses);
+                    $index += count($responses);
+                }
+
+                if(!isset($responses[$index])) {
                     throw new \Exception(
                         sprintf('Out of range response index used in variable "%s".', $matches[0]));
                 }
