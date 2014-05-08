@@ -30,17 +30,18 @@ class Sequence
     public function run()
     {
         $errors = [];
-        $response = null;
+        $responses = [];
 
         foreach($this->spec->get('requests') as $requestDetails) {
 
-            if($response) {
-                $requestDetails = $this->populateFromPreviousResponse($requestDetails, $response);
-            }
+            $requestDetails = $this->populateFromPreviousResponse($requestDetails, $responses);
+
             $details = new ArrayAccess($requestDetails);
             $request = new Request($this->client, $details, $this->variables);
 
             $response = $request->run();
+            $responses[] = $response;
+
             // echo $response->getBody();
             if($expects = $details->get('expects_response')) {
                 $this->validator->validateAll($expects, $response, $this->name, $requestDetails['name']);                
@@ -50,14 +51,21 @@ class Sequence
     }
 
     // todo: this doesn't belong here
-    protected function populateFromPreviousResponse($requestDetails, $response)
+    protected function populateFromPreviousResponse($requestDetails, array $responses)
     {
-        array_walk_recursive($requestDetails, function(&$item, $key, $response)
+        array_walk_recursive($requestDetails, function(&$item, $key, $responses)
         {
-            $pattern = '/%previous_request\.(?P<format>\w+)_data\.(?P<key>[a-zA-Z0-9-_\.]+)%/';
-            $item = preg_replace_callback($pattern, function($matches) use ($response)
+            $pattern = '/%responses\.(?P<index>\d+)\.(?P<format>\w+)_data\.(?P<key>[a-zA-Z0-9-_\.]+)%/';
+
+            // $pattern = '/%previous_request\.(?P<format>\w+)_data\.(?P<key>[a-zA-Z0-9-_\.]+)%/';
+            $item = preg_replace_callback($pattern, function($matches) use ($responses)
             {
-                $body = (string) $response->getBody();
+                if(!isset($responses[$matches['index']])) {
+                    throw new \Exception(
+                        sprintf('Out of range response index used in variable "%s".', $matches[0]));
+                }
+                $body = (string) end($responses)->getBody();
+
                 // todo make this more flexible
                 switch($matches['format']) {
                     case 'json':
@@ -65,7 +73,7 @@ class Sequence
                         return $data->get($matches['key']);
                 }
             }, $item);
-        }, $response);
+        }, $responses);
 
         return $requestDetails;
     }
